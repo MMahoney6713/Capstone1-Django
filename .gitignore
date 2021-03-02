@@ -1,4 +1,6 @@
 venv/
 Capstone1/goals_app/__pycache__/
+Capstone1/calendars/__pycache__/
+Capstone1/calendars/migrations/
 
 .DS_Store
