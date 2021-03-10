@@ -5,82 +5,12 @@
 {% block content %}
 <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <!-- <h1 class="h3 mb-4 text-gray-800">Buttons</h1> -->
-
     <div class="row">
 
+        <!-- Left Side of Page: -->
         <div class="col-lg-7">
 
-            <!-- Circle Buttons -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Coming up this week:</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="table-responsive mx-3">
-                            <table class="table table-bordered" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr class="bg-primary text-center text-light">
-                                        <th class="calendar-col">Sunday</th>
-                                        <th class="calendar-col">Monday</th>
-                                        <th class="calendar-col">Tuesday</th>
-                                        <th class="calendar-col">Wednesday</th>
-                                        <th class="calendar-col">Thursday</th>
-                                        <th class="calendar-col">Friday</th>
-                                        <th class="calendar-col">Saturday</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="p-1">
-                                            <a href="#" class="btn btn-success btn-block event p-0">
-                                                <span class="text p-0">Go shopping!!!!!!!!!</span>
-                                            </a>
-                                            <button type="button" class="btn btn-success btn-block event p-0">Go
-                                                shopping!!!!!!!!!</button>
-                                            <a href="#" class="btn btn-danger btn-block event p-0">
-                                                <span class="text p-0">Movies</span>
-                                            </a>
-                                        </td>
-                                        <td>Your day is free!</td>
-                                        <td>Your day is free!</td>
-                                        <td class="p-1">
-                                            <a href="#" class="btn btn-danger btn-block event p-0">
-                                                <span class="text p-0">Dinner with friendsssss</span>
-                                            </a>
-                                        </td>
-                                        <td class="p-1">
-                                            <div class="dropright">
-                                                <button type="button" class="btn btn-primary btn-block event p-0"
-                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    CS50 HW
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right shadow p-1 m-1"
-                                                    aria-labelledby="dropdown">
-                                                    <!-- Dropdown menu links -->
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-info"></i>
-                                                        Update
-                                                    </a>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fas fa-trash-alt fa-sm fa-fw mr-2 text-danger"></i>
-                                                        Rubbish
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Your day is free!</td>
-                                        <td>Your day is free!</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Monthly Views: -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h6 class="m-0 font-weight-bold text-primary">Monthly View:</h6>
@@ -92,6 +22,7 @@
 
         </div>
 
+        <!-- Right Side of Page:  -->
         <div class="col-lg-5">
 
             <div class="card shadow mb-4">
@@ -133,59 +64,66 @@
             </div>
 
         </div>
-
+        
     </div>
 
-    <!-- <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+    <!-- Modal for creating event -->
+    <!-- <div class="modal fade event-modal" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered edit-event-modal-content" role="document">
+            <div class="modal-content ">
                 <div class="modal-header">
-                <h5 class="modal-title" id="ModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="ModalLongTitle">Create Event</h5>
                 </div>
                 <div class="modal-body">
-                    <form class="user">
+                    <form class="" id="new-event-form">
+
                         <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                                    placeholder="First Name">
+                            <div class="col-sm-4">
+                                <label for="new-event-month" class="col-sm col-form-label">Month:</label>
+                                <div class="col-sm mb-6 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="new-event-month"
+                                        value="">
+                                </div>
                             </div>
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control form-control-user" id="exampleLastName"
-                                    placeholder="Last Name">
+
+                            <div class="col-sm-4">
+                                <label for="new-event-day" class="col-sm col-form-label">Day:</label>
+                                <div class="col-sm mb-6 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="new-event-day"
+                                        value="">
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="new-event-year" class="col-sm col-form-label">Year:</label>
+                                <div class="col-sm mb-6 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="new-event-year"
+                                        value="">
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                placeholder="Email Address">
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="password" class="form-control form-control-user"
-                                    id="exampleInputPassword" placeholder="Password">
-                            </div>
-                            <div class="col-sm-6">
-                                <input type="password" class="form-control form-control-user"
-                                    id="exampleRepeatPassword" placeholder="Repeat Password">
+
+                        <div class="form-group row px-3">
+                            <label for="new-event-title" class="col-sm-3 col-form-label">Title:</label>
+                            <div class="col-sm-8 mb-6 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" id="new-event-title"
+                                    placeholder="Title">
                             </div>
                         </div>
-                        <a href="login.html" class="btn btn-primary btn-user btn-block">
-                            Register Account
-                        </a>
-                        <hr>
-                        <a href="index.html" class="btn btn-google btn-user btn-block">
-                            <i class="fab fa-google fa-fw"></i> Register with Google
-                        </a>
-                        <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                            <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                        </a>
+
+                        <div class="form-group row px-3">
+                            <label for="new-event-goal" class="col-sm-3 col-form-label">Goal:</label>
+                            <div class="col-sm-8 mb-6 mb-sm-0">
+                                <input type="text" class="form-control form-control-user" id="new-event-goal"
+                                    placeholder="Goal">
+                            </div>
+                        </div>
+
                     </form>
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-success">Save Goal Event</button>
+                    <button type="button" class="btn btn-danger btn-event-cancel" data-dismiss="modal">Cancel</button>
+                    <button form="new-event-form" type="button" class="btn btn-success btn-event-create">Save Event</button>
                 </div>
             </div>
         </div>
