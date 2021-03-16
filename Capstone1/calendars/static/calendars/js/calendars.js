@@ -27,7 +27,7 @@ $(function () {
         addCalendarToDOM(firstDayOfMonth, daysInMonth, blocksNeeded, calendarBody, calendarHead, today);
     }
 
-    function buildCalendarHead(months, year) {
+    function buildCalendarHead(month, year) {
         return $(`
         <table class="table table-bordered py-2 my-2" width="100%" cellspacing="0">
             <thead class="font-weight-bold">
@@ -171,9 +171,7 @@ $(function () {
             const formDate = $('#new-milestone-year').val() + '-' + $('#new-milestone-month').val() + '-' + $('#new-milestone-day').val();
             milestoneObj.detach().appendTo($(`#${formDate}`));
 
-            if (milestoneObj.hasClass('created')) {
-
-            } else {
+            if (!milestoneObj.hasClass('created')) {
                 milestoneObj.toggleClass('created');
             }
             modalObj.modal('hide');
@@ -183,13 +181,9 @@ $(function () {
             if (!milestoneObj.hasClass('created')) {
                 milestoneObj.remove();
             }
-            // CSS transition for modal fade gets in the way of the modal being removed, so wait for transition and then remove
-            // setTimeout(()=>(modalObj.remove()),200);
             modalObj.remove();
         })
     }
-
-
 
 
 
@@ -281,5 +275,4 @@ $(function () {
             `);
         return $modal;
     }
-
 })
