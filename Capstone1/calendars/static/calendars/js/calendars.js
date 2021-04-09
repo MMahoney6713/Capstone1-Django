@@ -2,6 +2,7 @@ $(function () {
 
     // Helpful jQuery objects for later use
     const monthlyViewDiv = $('.month-views');
+    const milestoneModal = $('#milestone-modal')
 
     ////////////////////////////////////////////////////////////
     ///// Build the HTML for each of the monthly calendars /////
@@ -117,32 +118,38 @@ $(function () {
     ///// Add event handlers for add/edit event actions on the calendars /////
     //////////////////////////////////////////////////////////////////////////
     
-    monthlyViewDiv.on('click', 'td.milestone-space', function (event) {
-        target = $(event.target);
+    // monthlyViewDiv.on('click', 'td.milestone-space', function (event) {
+    //     target = $(event.target);
         
-        // Check if the modal is already open, or if event edit dropdown is open
-        const modalIsOpen = $('.milestone-modal').length;
-        const eventEditIsOpen = $('.dropdown-menu.show').length;
+    //     // Check if the modal is already open, or if event edit dropdown is open
+    //     const modalIsOpen = $('.milestone-modal').length;
+    //     const eventEditIsOpen = $('.dropdown-menu.show').length;
 
-        if (target[0].nodeName === "A"){
-            currentEvent = target.parent().parent();
+    //     if (target[0].nodeName === "A"){
+    //         currentEvent = target.parent().parent();
             
-            if (target.hasClass('milestone-delete')) {
-                currentEvent.remove();
-            } else if (target.hasClass('milestone-update')) {
-                eventModal = createAndShowEventModal(currentEvent.parent(), method='patch');
-                addModalListeners(milestone, eventModal);
-            }
+    //         if (target.hasClass('milestone-delete')) {
+    //             currentEvent.remove();
+    //         } else if (target.hasClass('milestone-update')) {
+    //             eventModal = createAndShowEventModal(currentEvent.parent(), method='patch');
+    //             addModalListeners(milestone, eventModal);
+    //         }
 
-        } else if (modalIsOpen !== 0 || eventEditIsOpen !== 0 || target[0].nodeName === "BUTTON") {
-            return; 
+    //     } else if (modalIsOpen !== 0 || eventEditIsOpen !== 0 || target[0].nodeName === "BUTTON") {
+    //         return; 
 
-        } else {
-            milestone = newMilestone(); 
-            target.append(milestone);
-            eventModal = createAndShowEventModal(target);
-            addModalListeners(milestone, eventModal);
-        }
+    //     } else {
+    //         milestone = newMilestone(); 
+    //         target.append(milestone);
+    //         eventModal = createAndShowEventModal(target);
+    //         addModalListeners(milestone, eventModal);
+    //     }
+    // })
+
+    monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
+        milestoneModal.modal('show')
+        const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'});
+        console.log(response);
     })
 
     function createAndShowEventModal (targetObj, method='post') {
@@ -159,8 +166,11 @@ $(function () {
             modalObj.modal('hide');
         })
 
-        $('.btn-milestone-create').on('click', function(event) {
+        $('.btn-milestone-create').on('click', async function(event) {
             event.preventDefault();
+
+            const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'})
+            console.log(response)
 
             let formTitle = $('#new-milestone-title').val();
             if (formTitle === '') {
@@ -210,69 +220,69 @@ $(function () {
         `);
     }
 
-    function newModal(year, month, day, method) {
-        $modal = $(`
-            <div class="modal fade milestone-modal ${method}" id="editMilestoneModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered edit-milestone-modal-content" role="document">
-                    <div class="modal-content ">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="ModalLongTitle">Create/Edit Event</h5>
-                        </div>
-                        <div class="modal-body">
-                            <form class="${method}" id="new-event-form" action="/milestones" method="${method}">
+    // function newModal(year, month, day, method) {
+    //     $modal = $(`
+    //         <div class="modal fade milestone-modal ${method}" id="editMilestoneModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    //             <div class="modal-dialog modal-dialog-centered edit-milestone-modal-content" role="document">
+    //                 <div class="modal-content ">
+    //                     <div class="modal-header">
+    //                     <h5 class="modal-title" id="ModalLongTitle">Create/Edit Event</h5>
+    //                     </div>
+    //                     <div class="modal-body">
+    //                         <form class="${method}" id="new-event-form" action="/milestones" method="GET">
 
-                                <div class="form-group row">
-                                    <div class="col-sm-4">
-                                        <label for="new-milestone-month" class="col-sm col-form-label">Month:</label>
-                                        <div class="col-sm mb-6 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="new-milestone-month"
-                                                value="${month}">
-                                        </div>
-                                    </div>
+    //                             <div class="form-group row">
+    //                                 <div class="col-sm-4">
+    //                                     <label for="new-milestone-month" class="col-sm col-form-label">Month:</label>
+    //                                     <div class="col-sm mb-6 mb-sm-0">
+    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-month"
+    //                                             value="${month}">
+    //                                     </div>
+    //                                 </div>
 
-                                    <div class="col-sm-4">
-                                        <label for="new-milestone-day" class="col-sm col-form-label">Day:</label>
-                                        <div class="col-sm mb-6 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="new-milestone-day"
-                                                value="${day}">
-                                        </div>
-                                    </div>
+    //                                 <div class="col-sm-4">
+    //                                     <label for="new-milestone-day" class="col-sm col-form-label">Day:</label>
+    //                                     <div class="col-sm mb-6 mb-sm-0">
+    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-day"
+    //                                             value="${day}">
+    //                                     </div>
+    //                                 </div>
 
-                                    <div class="col-sm-4">
-                                        <label for="new-milestone-year" class="col-sm col-form-label">Year:</label>
-                                        <div class="col-sm mb-6 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="new-milestone-year"
-                                                value="${year}">
-                                        </div>
-                                    </div>
-                                </div>
+    //                                 <div class="col-sm-4">
+    //                                     <label for="new-milestone-year" class="col-sm col-form-label">Year:</label>
+    //                                     <div class="col-sm mb-6 mb-sm-0">
+    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-year"
+    //                                             value="${year}">
+    //                                     </div>
+    //                                 </div>
+    //                             </div>
 
-                                <div class="form-group row px-3">
-                                    <label for="new-milestone-title" class="col-sm-3 col-form-label">Title:</label>
-                                    <div class="col-sm-8 mb-6 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="new-milestone-title"
-                                            placeholder="Title">
-                                    </div>
-                                </div>
+    //                             <div class="form-group row px-3">
+    //                                 <label for="new-milestone-title" class="col-sm-3 col-form-label">Title:</label>
+    //                                 <div class="col-sm-8 mb-6 mb-sm-0">
+    //                                     <input type="text" class="form-control form-control-user" id="new-milestone-title"
+    //                                         placeholder="Title">
+    //                                 </div>
+    //                             </div>
 
-                                <div class="form-group row px-3">
-                                    <label for="new-event-goal" class="col-sm-3 col-form-label">Goal:</label>
-                                    <div class="col-sm-8 mb-6 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" id="new-event-goal"
-                                            placeholder="Goal">
-                                    </div>
-                                </div>
-
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-milestone-cancel" data-dismiss="modal">Cancel</button>
-                            <button form="new-event-form" type="button" class="btn btn-success btn-milestone-create">Save Event</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `);
-        return $modal;
-    }
+    //                             <div class="form-group row px-3">
+    //                                 <label for="new-event-goal" class="col-sm-3 col-form-label">Goal:</label>
+    //                                 <div class="col-sm-8 mb-6 mb-sm-0">
+    //                                     <input type="text" class="form-control form-control-user" id="new-event-goal"
+    //                                         placeholder="Goal">
+    //                                 </div>
+    //                             </div>
+    //                             <button form="new-event-form" type="button" class="btn btn-success btn-milestone-create">Save Event</button>
+    //                         </form>
+    //                     </div>
+    //                     <div class="modal-footer">
+    //                         <button type="button" class="btn btn-danger btn-milestone-cancel" data-dismiss="modal">Cancel</button>
+                            
+    //                     </div>
+    //                 </div>
+    //             </div>
+    //         </div>
+    //         `);
+    //     return $modal;
+    // }
 })

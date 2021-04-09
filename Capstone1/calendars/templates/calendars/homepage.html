@@ -68,66 +68,66 @@
     </div>
 
     <!-- Modal for creating event -->
-    <!-- <div class="modal fade event-modal" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered edit-event-modal-content" role="document">
+    <div class="modal fade milestone-modal" id="milestone-modal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered edit-milestone-modal-content" role="document">
             <div class="modal-content ">
                 <div class="modal-header">
-                <h5 class="modal-title" id="ModalLongTitle">Create Event</h5>
+                <h5 class="modal-title" id="ModalLongTitle">Create/Edit Event</h5>
                 </div>
                 <div class="modal-body">
-                    <form class="" id="new-event-form">
+                    <form class="" id="milestone-form" action="/milestones" method="POST"> {% csrf_token %}
 
                         <div class="form-group row">
                             <div class="col-sm-4">
-                                <label for="new-event-month" class="col-sm col-form-label">Month:</label>
+                                <label for="milestone-month" class="col-sm col-form-label">Month:</label>
                                 <div class="col-sm mb-6 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="new-event-month"
-                                        value="">
+                                    <input type="text" class="form-control form-control-user" id="milestone-month"
+                                        value="1">
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
-                                <label for="new-event-day" class="col-sm col-form-label">Day:</label>
+                                <label for="milestone-day" class="col-sm col-form-label">Day:</label>
                                 <div class="col-sm mb-6 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="new-event-day"
-                                        value="">
+                                    <input type="text" class="form-control form-control-user" id="milestone-day"
+                                        value="1">
                                 </div>
                             </div>
 
                             <div class="col-sm-4">
-                                <label for="new-event-year" class="col-sm col-form-label">Year:</label>
+                                <label for="milestone-year" class="col-sm col-form-label">Year:</label>
                                 <div class="col-sm mb-6 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="new-event-year"
-                                        value="">
+                                    <input type="text" class="form-control form-control-user" id="milestone-year"
+                                        value="1">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group row px-3">
-                            <label for="new-event-title" class="col-sm-3 col-form-label">Title:</label>
+                            <label for="milestone-title" class="col-sm-3 col-form-label">Title:</label>
                             <div class="col-sm-8 mb-6 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="new-event-title"
+                                <input type="text" class="form-control form-control-user" id="milestone-title"
                                     placeholder="Title">
                             </div>
                         </div>
 
                         <div class="form-group row px-3">
-                            <label for="new-event-goal" class="col-sm-3 col-form-label">Goal:</label>
+                            <label for="milestone-goal" class="col-sm-3 col-form-label">Goal:</label>
                             <div class="col-sm-8 mb-6 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="new-event-goal"
+                                <input type="text" class="form-control form-control-user" id="milestone-goal"
                                     placeholder="Goal">
                             </div>
                         </div>
-
+                        <button form="milestone-form" type="button" class="btn btn-success btn-milestone-create">Save Milestone</button>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-event-cancel" data-dismiss="modal">Cancel</button>
-                    <button form="new-event-form" type="button" class="btn btn-success btn-event-create">Save Event</button>
+                    <button type="button" class="btn btn-danger btn-milestone-cancel" data-dismiss="modal">Cancel</button>
+                    
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
 </div>
 {% endblock %}

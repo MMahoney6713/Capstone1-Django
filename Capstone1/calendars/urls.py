@@ -5,4 +5,5 @@ app_name = 'calendars'
 
 urlpatterns = [
     path('', views.homepage, name='homepage'),
+    path('milestones', views.milestones, name='milestones'),
 ]

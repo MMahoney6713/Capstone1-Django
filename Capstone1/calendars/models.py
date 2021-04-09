@@ -34,3 +34,12 @@ class Milestones(models.Model):
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     date = models.DateField()
 
+    def JSON(self):
+        return {
+            'id': self.id,
+            'goal_id': self.goal.id,
+            'day': self.date.day,
+            'month': self.date.month,
+            'year': self.date.year
+        }
+
