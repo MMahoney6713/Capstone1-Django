@@ -5,7 +5,6 @@ from django.utils import timezone
 
 
 class Users(models.Model):
-    id = models.IntegerField(primary_key=True)
     username = models.CharField(max_length=15, unique=True)
     email = models.EmailField()
     name = models.CharField(max_length=30)
@@ -14,7 +13,6 @@ class Users(models.Model):
 
 
 class Missions(models.Model):
-    id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     description = models.CharField(max_length=200)
@@ -22,7 +20,6 @@ class Missions(models.Model):
 
 
 class Goals(models.Model):
-    id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     title = models.CharField(max_length=20)
     description = models.CharField(max_length=200)
@@ -30,7 +27,7 @@ class Goals(models.Model):
 
 
 class Milestones(models.Model):
-    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=20)
     goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
     date = models.DateField()
 
@@ -38,6 +35,7 @@ class Milestones(models.Model):
         return {
             'id': self.id,
             'goal_id': self.goal.id,
+            'title': self.title,
             'day': self.date.day,
             'month': self.date.month,
             'year': self.date.year

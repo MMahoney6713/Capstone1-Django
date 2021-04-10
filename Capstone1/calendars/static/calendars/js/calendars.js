@@ -147,55 +147,97 @@ $(function () {
     // })
 
     monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
-        milestoneModal.modal('show')
-        const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'});
-        console.log(response);
+        const clickedCalendarCell = $(event.target).closest('td');
+        tempMilestone = showTemporaryMilestone(clickedCalendarCell);
+        setupAndShowModal(clickedCalendarCell, tempMilestone);
+        
+        // const response = await axios.post('http://127.0.0.1:8000/milestones', {'title':'title', 'date':'date'});
+        // console.log(response);
     })
 
-    function createAndShowEventModal (targetObj, method='post') {
-            const [year, month, day] = targetObj.attr('id').split('-');
-            modal = newModal(year, month, day, method);
-            $('body').append(modal);
-            modal.modal('show');
-            return modal
+    function showTemporaryMilestone(calendarCell) {
+        tempMilestone = newMilestone();
+        calendarCell.append(tempMilestone);
+        return tempMilestone;
     }
 
-    function addModalListeners(milestoneObj, modalObj) {
-        
-        $('.btn-milestone-cancel').on('click', function() {
-            modalObj.modal('hide');
-        })
+    function setupAndShowModal(calendarCell, tempMilestone) {
+        milestoneModal.modal('show')
+        const [year, month, day] = calendarCell.attr('id').split('-'); 
+        $('#milestone-year').val(year)
+        $('#milestone-month').val(month)
+        $('#milestone-day').val(day)
+        addModalListeners(milestoneModal, calendarCell, tempMilestone)
+    }
 
+    function addModalListeners(milestoneModal, calendarCell, tempMilestone) {
+        
         $('.btn-milestone-create').on('click', async function(event) {
             event.preventDefault();
 
-            const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'})
-            console.log(response)
+            const milestoneData = retreiveMilestoneDataFromModal()
+            const errors = validateMilestoneInputs(milestoneData);
+            if (errors.length === 0) {
 
-            let formTitle = $('#new-milestone-title').val();
-            if (formTitle === '') {
-                formTitle = 'New Milestone';
+                const response = await axios.post('http://127.0.0.1:8000/milestones', milestoneData);
+                const newMilestone = new Milestone(response.data);
+                
+                tempMilestone.remove();
+                calendarCell.append(newMilestone.HTML());
+
+                milestoneModal.modal('hide');
+                $('#milestone-title').val('');
+                $('#milestone-goal').val('');
+
+            } else {
+
             }
-            milestoneObj.children('.event').html(formTitle);
 
-            const formDate = $('#new-milestone-year').val() + '-' + $('#new-milestone-month').val() + '-' + $('#new-milestone-day').val();
-            milestoneObj.detach().appendTo($(`#${formDate}`));
 
-            if (!milestoneObj.hasClass('created')) {
-                milestoneObj.toggleClass('created');
-            }
-            modalObj.modal('hide');
+            // const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'})
+            // console.log(response)
+
+            // let formTitle = $('#new-milestone-title').val();
+            // if (formTitle === '') {
+            //     formTitle = 'New Milestone';
+            // }
+            // milestoneObj.children('.event').html(formTitle);
+
+            // const formDate = $('#new-milestone-year').val() + '-' + $('#new-milestone-month').val() + '-' + $('#new-milestone-day').val();
+            // milestoneObj.detach().appendTo($(`#${formDate}`));
+
+            // if (!milestoneObj.hasClass('created')) {
+            //     milestoneObj.toggleClass('created');
+            // }
+            // modalObj.modal('hide');
         })
 
-        modalObj.on('hidden.bs.modal', function() {
-            if (!milestoneObj.hasClass('created')) {
-                milestoneObj.remove();
-            }
-            modalObj.remove();
+        $('.btn-milestone-cancel').on('click', function() {
+            milestoneModal.modal('hide');
+            tempMilestone.remove();
         })
+
+        // modalObj.on('hidden.bs.modal', function() {
+        //     if (!milestoneObj.hasClass('created')) {
+        //         milestoneObj.remove();
+        //     }
+        //     modalObj.remove();
+        // })
     }
 
+    function validateMilestoneInputs(milestoneInputs) {
+        return [];
+    }
 
+    function retreiveMilestoneDataFromModal() {
+        return {
+            'year': $('#milestone-year').val(),
+            'month': $('#milestone-month').val(),
+            'day': $('#milestone-day').val(),
+            'title': $('#milestone-title').val(),
+            'goal_id': $('#milestone-goal').val(),
+        }
+    }
 
 
     function newMilestone() {
@@ -219,70 +261,4 @@ $(function () {
         </div>
         `);
     }
-
-    // function newModal(year, month, day, method) {
-    //     $modal = $(`
-    //         <div class="modal fade milestone-modal ${method}" id="editMilestoneModal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
-    //             <div class="modal-dialog modal-dialog-centered edit-milestone-modal-content" role="document">
-    //                 <div class="modal-content ">
-    //                     <div class="modal-header">
-    //                     <h5 class="modal-title" id="ModalLongTitle">Create/Edit Event</h5>
-    //                     </div>
-    //                     <div class="modal-body">
-    //                         <form class="${method}" id="new-event-form" action="/milestones" method="GET">
-
-    //                             <div class="form-group row">
-    //                                 <div class="col-sm-4">
-    //                                     <label for="new-milestone-month" class="col-sm col-form-label">Month:</label>
-    //                                     <div class="col-sm mb-6 mb-sm-0">
-    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-month"
-    //                                             value="${month}">
-    //                                     </div>
-    //                                 </div>
-
-    //                                 <div class="col-sm-4">
-    //                                     <label for="new-milestone-day" class="col-sm col-form-label">Day:</label>
-    //                                     <div class="col-sm mb-6 mb-sm-0">
-    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-day"
-    //                                             value="${day}">
-    //                                     </div>
-    //                                 </div>
-
-    //                                 <div class="col-sm-4">
-    //                                     <label for="new-milestone-year" class="col-sm col-form-label">Year:</label>
-    //                                     <div class="col-sm mb-6 mb-sm-0">
-    //                                         <input type="text" class="form-control form-control-user" id="new-milestone-year"
-    //                                             value="${year}">
-    //                                     </div>
-    //                                 </div>
-    //                             </div>
-
-    //                             <div class="form-group row px-3">
-    //                                 <label for="new-milestone-title" class="col-sm-3 col-form-label">Title:</label>
-    //                                 <div class="col-sm-8 mb-6 mb-sm-0">
-    //                                     <input type="text" class="form-control form-control-user" id="new-milestone-title"
-    //                                         placeholder="Title">
-    //                                 </div>
-    //                             </div>
-
-    //                             <div class="form-group row px-3">
-    //                                 <label for="new-event-goal" class="col-sm-3 col-form-label">Goal:</label>
-    //                                 <div class="col-sm-8 mb-6 mb-sm-0">
-    //                                     <input type="text" class="form-control form-control-user" id="new-event-goal"
-    //                                         placeholder="Goal">
-    //                                 </div>
-    //                             </div>
-    //                             <button form="new-event-form" type="button" class="btn btn-success btn-milestone-create">Save Event</button>
-    //                         </form>
-    //                     </div>
-    //                     <div class="modal-footer">
-    //                         <button type="button" class="btn btn-danger btn-milestone-cancel" data-dismiss="modal">Cancel</button>
-                            
-    //                     </div>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //         `);
-    //     return $modal;
-    // }
 })
