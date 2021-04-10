@@ -114,49 +114,18 @@ $(function () {
 
 
     
-    //////////////////////////////////////////////////////////////////////////
-    ///// Add event handlers for add/edit event actions on the calendars /////
-    //////////////////////////////////////////////////////////////////////////
-    
-    // monthlyViewDiv.on('click', 'td.milestone-space', function (event) {
-    //     target = $(event.target);
-        
-    //     // Check if the modal is already open, or if event edit dropdown is open
-    //     const modalIsOpen = $('.milestone-modal').length;
-    //     const eventEditIsOpen = $('.dropdown-menu.show').length;
+    //////////////////////////////////////////////////////////////////////////////
+    ///// Add event handlers for add/edit milestone actions on the calendars /////
+    //////////////////////////////////////////////////////////////////////////////
 
-    //     if (target[0].nodeName === "A"){
-    //         currentEvent = target.parent().parent();
-            
-    //         if (target.hasClass('milestone-delete')) {
-    //             currentEvent.remove();
-    //         } else if (target.hasClass('milestone-update')) {
-    //             eventModal = createAndShowEventModal(currentEvent.parent(), method='patch');
-    //             addModalListeners(milestone, eventModal);
-    //         }
-
-    //     } else if (modalIsOpen !== 0 || eventEditIsOpen !== 0 || target[0].nodeName === "BUTTON") {
-    //         return; 
-
-    //     } else {
-    //         milestone = newMilestone(); 
-    //         target.append(milestone);
-    //         eventModal = createAndShowEventModal(target);
-    //         addModalListeners(milestone, eventModal);
-    //     }
-    // })
-
-    monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
+    monthlyViewDiv.on('click', 'td.milestone-space', function (event) {
         const clickedCalendarCell = $(event.target).closest('td');
         tempMilestone = showTemporaryMilestone(clickedCalendarCell);
         setupAndShowModal(clickedCalendarCell, tempMilestone);
-        
-        // const response = await axios.post('http://127.0.0.1:8000/milestones', {'title':'title', 'date':'date'});
-        // console.log(response);
     })
 
     function showTemporaryMilestone(calendarCell) {
-        tempMilestone = newMilestone();
+        tempMilestone = Milestone.emptyMilestone();
         calendarCell.append(tempMilestone);
         return tempMilestone;
     }
@@ -188,41 +157,16 @@ $(function () {
                 milestoneModal.modal('hide');
                 $('#milestone-title').val('');
                 $('#milestone-goal').val('');
-
+                $('.btn-milestone-create').off();
             } else {
 
             }
-
-
-            // const response = await axios.post('http://127.0.0.1:8000/milestones?ID=12345', {'title':'title', 'date':'date'})
-            // console.log(response)
-
-            // let formTitle = $('#new-milestone-title').val();
-            // if (formTitle === '') {
-            //     formTitle = 'New Milestone';
-            // }
-            // milestoneObj.children('.event').html(formTitle);
-
-            // const formDate = $('#new-milestone-year').val() + '-' + $('#new-milestone-month').val() + '-' + $('#new-milestone-day').val();
-            // milestoneObj.detach().appendTo($(`#${formDate}`));
-
-            // if (!milestoneObj.hasClass('created')) {
-            //     milestoneObj.toggleClass('created');
-            // }
-            // modalObj.modal('hide');
         })
 
         $('.btn-milestone-cancel').on('click', function() {
             milestoneModal.modal('hide');
             tempMilestone.remove();
         })
-
-        // modalObj.on('hidden.bs.modal', function() {
-        //     if (!milestoneObj.hasClass('created')) {
-        //         milestoneObj.remove();
-        //     }
-        //     modalObj.remove();
-        // })
     }
 
     function validateMilestoneInputs(milestoneInputs) {
@@ -237,28 +181,5 @@ $(function () {
             'title': $('#milestone-title').val(),
             'goal_id': $('#milestone-goal').val(),
         }
-    }
-
-
-    function newMilestone() {
-        return $(`
-        <div class="dropright">
-            <button type="button" class="btn btn-secondary btn-block milestone p-0 my-1"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                New Milestone
-            </button>
-            <div class="dropdown-menu dropdown-menu-right shadow p-1 m-1 overflow"
-                aria-labelledby="dropdown">
-                <a class="dropdown-item milestone-update">
-                    <i class="fas fa-pencil-alt fa-sm fa-fw mr-2 text-info"></i>
-                    Update
-                </a>
-                <a class="dropdown-item milestone-delete">
-                    <i class="fas fa-trash-alt fa-sm fa-fw mr-2 text-danger"></i>
-                    Rubbish
-                </a>
-            </div>
-        </div>
-        `);
     }
 })
