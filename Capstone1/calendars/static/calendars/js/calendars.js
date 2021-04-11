@@ -4,17 +4,23 @@ $(function () {
     const monthlyViewDiv = $('.month-views');
     const milestoneModal = $('#milestone-modal')
 
+    const BASE_URL = 'http://127.0.0.1:8000'
+
     ////////////////////////////////////////////////////////////
     ///// Build the HTML for each of the monthly calendars /////
     ////////////////////////////////////////////////////////////
 
-    function buildCalendars(monthTemp, yearTemp, today) {
+    async function setupCalendar(monthTemp, yearTemp, today) {
         const monthsArray = ['January', 'February', 'March', 'April', 'May',
             'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         
         // Reset Month and Year using the input temporary variables in case of month value being < 0 or > 12
         month = new Date(yearTemp, monthTemp).getMonth();
         year = new Date(yearTemp, monthTemp).getFullYear();
+
+        // Get the milestone data from server
+        const milestonesThisMonth = await axios.get(`${BASE_URL}/milestones`, {params: {'month':month, 'year':year}});
+        console.log(milestonesThisMonth);
 
         // Initiate a head and body for the calendar table
         const calendarHead = buildCalendarHead(monthsArray[month], year); 
@@ -25,7 +31,7 @@ $(function () {
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const blocksNeeded = calendarBlocksNeeded(firstDayOfMonth, daysInMonth);
 
-        addCalendarToDOM(firstDayOfMonth, daysInMonth, blocksNeeded, calendarBody, calendarHead, today);
+        addCalendarToDOM(firstDayOfMonth, daysInMonth, blocksNeeded, calendarBody, calendarHead, today, milestonesThisMonth);
     }
 
     function buildCalendarHead(month, year) {
@@ -62,7 +68,7 @@ $(function () {
         return numberBlankCellsToFirstDay + numberBlanksAtEnd + daysInMonth;
     }
 
-    function addCalendarToDOM(firstDayOfMonth, daysInMonth, blocksNeeded, calendarBody, calendarHead, today) {
+    function addCalendarToDOM(firstDayOfMonth, daysInMonth, blocksNeeded, calendarBody, calendarHead, today, milestonesThisMonth) {
         
         // Counters for making sure the calendar dates are lined up 
         let blockCount = 0;
@@ -87,6 +93,23 @@ $(function () {
                         dayRow.append($(`<td class="py-1">${dayCount}</td>`));
                         milestoneRow.append($(`<td class="milestone-space p-1" id="${year}-${month + 1}-${dayCount}">`));
                     }
+
+
+
+
+                    
+                    // Temporary for adding milestones
+                    for (let k = 0; k < milestonesThisMonth.data.length; k++) {
+                        if (Object.keys(milestonesThisMonth.data[k]).includes(`${dayCount}`)) {
+                            const newMilestone = new Milestone(Object.values(milestonesThisMonth.data[k])[0]);
+                            milestoneRow.children().last().append(newMilestone.HTML());
+                        }
+                    }
+
+
+
+
+
                     dayCount++;
                 }
                 blockCount++;
@@ -99,14 +122,17 @@ $(function () {
     }
 
     // Build the calendar HTML in the DOM
-    const numberOfMonthsToShow = 3;
-    for (let i = 0; i < numberOfMonthsToShow; i++) {
-        const today = new Date();
-        const currentMonth = today.getMonth();
-        const currentYear = today.getFullYear();
-        
-        buildCalendars(currentMonth + i, currentYear, today);
+    async function buildCalendars(numberOfMonthsToShow) {
+        for (let i = 0; i < numberOfMonthsToShow; i++) {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            
+            await setupCalendar(currentMonth + i, currentYear, today);
+        }
     }
+    const numberOfMonthsToShow = 3;
+    buildCalendars(numberOfMonthsToShow);
 
 
 
@@ -148,7 +174,7 @@ $(function () {
             const errors = validateMilestoneInputs(milestoneData);
             if (errors.length === 0) {
 
-                const response = await axios.post('http://127.0.0.1:8000/milestones', milestoneData);
+                const response = await axios.post(`${BASE_URL}/milestones`, milestoneData);
                 const newMilestone = new Milestone(response.data);
                 
                 tempMilestone.remove();

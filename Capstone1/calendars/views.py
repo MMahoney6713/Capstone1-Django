@@ -18,10 +18,18 @@ def exampleRedirect(request, question_id):
 @csrf_exempt
 def milestones(request):
     
-    milestoneData = json.loads(request.body)
-    newMilestone = Milestones.objects.create(date=date(int(milestoneData['year']), int(milestoneData['month']), int(milestoneData['day'])), title=milestoneData['title'], goal_id=milestoneData['goal_id'])
-    newMilestone.save()
+    if request.method == "POST":
+        milestoneData = json.loads(request.body)
+        newMilestone = Milestones.objects.create(date=date(int(milestoneData['year']), int(milestoneData['month']), int(milestoneData['day'])), title=milestoneData['title'], goal_id=milestoneData['goal_id'])
+        newMilestone.save()
+        return JsonResponse(newMilestone.JSON())
 
-    # import pdb; pdb.set_trace()
+    elif request.method == "GET":
+        month = int(request.GET.get('month'))+1 # Adjust the month value +1 based on differences between datetime objects and front end date objects
+        year = int(request.GET.get('year'))        
+        monthMilestones = Milestones.objects.filter(date__gte=date(year,month,1)).filter(date__lt=date(year,month+1,1)).order_by('date')
+        monthMilestonesJSON = [{milestone.date.day: milestone.JSON()} for milestone in monthMilestones]
+        # import pdb; pdb.set_trace()
+        return JsonResponse(monthMilestonesJSON, safe=False)
 
-    return JsonResponse(newMilestone.JSON())
+    
