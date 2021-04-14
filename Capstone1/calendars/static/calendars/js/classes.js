@@ -66,3 +66,10 @@ class Calendar {
     }
 
 }
+
+
+class Goal {
+    constructor() {
+        
+    }
+}
