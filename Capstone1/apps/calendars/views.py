@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from datetime import date
 import json
 
-from calendars.models import Milestones, Goals
+from apps.calendars.models import Milestones, Goals
 
 
 def homepage(request):
