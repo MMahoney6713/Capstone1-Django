@@ -2,12 +2,13 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.contrib.auth.decorators import login_required
 from datetime import date
 import json
 
 from apps.calendars.models import Milestones, Goals
 
-
+# @login_required()
 def homepage(request):
     return render(request, 'calendars/homepage.html')
 
@@ -33,3 +34,4 @@ def milestones(request):
         return JsonResponse(monthMilestonesJSON, safe=False)
 
     
+# @login_required(redirect_field_name='my_redirect_field')

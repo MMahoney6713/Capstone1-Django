@@ -1,0 +1,12 @@
+[
+    {
+        "model": "users.User",
+        "pk": 1,
+        "fields": {
+            "email": "mrm257@cornell.edu", 
+            "full_name": "Michael Mahoney",
+            "password": "Tessa123"
+        }
+    }
+    
+  ]

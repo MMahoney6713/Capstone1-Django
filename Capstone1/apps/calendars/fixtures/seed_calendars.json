@@ -1,0 +1,21 @@
+[
+    {
+        "model": "calendars.missions",
+        "pk": 1,
+        "fields": {
+            "user_id": "1",
+            "title": "Be awesome",
+            "description": "Self explanatory"
+        }
+    },
+
+    {
+        "model": "calendars.goals",
+        "pk": 1,
+        "fields": {
+            "user_id": "1",
+            "title": "Be awesome",
+            "description": "Self explanatory"
+        }
+    }
+  ]
