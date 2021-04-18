@@ -1,6 +1,7 @@
 $(function() {
 
     const BASE_URL = 'http://127.0.0.1:8000'
+    $('#content-wrapper').addClass('bg-gradient-primary');
 
     $('#registerBtn').on('click', async function (event) {
         event.preventDefault();

@@ -1,6 +1,6 @@
-{% extends 'calendars/main-template.html' %}
+{% extends 'main-template.html' %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}On Purpose{% endblock %}
 
 {% block content %}
 <div class="container-fluid">
@@ -133,4 +133,12 @@
     </div>
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'calendars/js/classes.js' %}"></script>
+<script src="{% static 'calendars/js/calendars.js' %}"></script>
+<script src="{% static 'calendars/js/missions.js' %}"></script>
+<script src="{% static 'calendars/js/goals.js' %}"></script>
 {% endblock %}

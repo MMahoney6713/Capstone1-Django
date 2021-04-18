@@ -1,4 +1,4 @@
-{% extends 'users/login-template.html' %}
+{% extends 'main-template.html' %}
 
 {% block title %}Login{% endblock %}
 
@@ -66,4 +66,9 @@
     </div>
 
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'users/js/users.js' %}"></script>
 {% endblock %}
