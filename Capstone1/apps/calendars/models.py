@@ -5,13 +5,6 @@ from django.utils import timezone
 
 from apps.users.models import User 
 
-# class Users(models.Model):
-#     username = models.CharField(max_length=15, unique=True)
-#     email = models.EmailField()
-#     name = models.CharField(max_length=30)
-#     password = models.CharField(max_length=100)
-#     # image = models.ImageField()
-
 
 class Missions(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

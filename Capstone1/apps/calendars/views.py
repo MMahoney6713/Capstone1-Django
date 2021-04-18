@@ -8,15 +8,12 @@ import json
 
 from apps.calendars.models import Milestones, Goals
 
-# @login_required()
+@login_required
 def homepage(request):
     return render(request, 'calendars/homepage.html')
 
-
-def exampleRedirect(request, question_id):
-    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-
 @csrf_exempt
+@login_required
 def milestones(request):
     
     if request.method == "POST":

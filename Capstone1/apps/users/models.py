@@ -65,8 +65,29 @@ class User(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
+    @classmethod
+    def validate_registration_data(cls, data_obj):
+        password1 = data_obj['password1']
+        password2 = data_obj['password2']
+        full_name = data_obj['fullname']
+        email = data_obj['email']
+
+        # Implement error handling here - or else in model based validation?
+
+        # errors = {}
+        # if password1 != password2:
+        #     errors['password'] = 'Passwords do not match'
+        # elif full_name == '':
+        #     errors['name'] = 'A name must be entered'
+        # elif email = '':
+        #     errors[]
+        return True
+
+
     @property
     def is_staff(self):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+    
