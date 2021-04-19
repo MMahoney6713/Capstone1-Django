@@ -9,8 +9,8 @@ import json
 from apps.calendars.models import Milestones, Goals
 
 @login_required
-def homepage(request):
-    return render(request, 'calendars/homepage.html')
+def calendars_view(request):
+    return render(request, 'calendars/calendars.html')
 
 @csrf_exempt
 @login_required

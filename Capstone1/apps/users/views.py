@@ -6,6 +6,9 @@ import json
 
 from apps.users.models import User
 
+def landing_page(request):
+    return render(request, 'users/landing-page.html')
+
 @csrf_exempt
 def register_view(request):
     if request.method == 'GET':
@@ -27,7 +30,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             # Redirect to a success page.
-            return redirect('calendars:homepage')
+            return redirect('calendars:calendars_view')
         else:
             # Return an 'invalid login' error message.
             return redirect('users:login_view')
