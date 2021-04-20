@@ -10,4 +10,5 @@ urlpatterns = [
     path('register', views.register_view, name='register_view'),
     path('logout', views.logout_view, name='logout_view'),
     path('', views.landing_page, name='landing_page'),
+    # path('users', views.return_user_ID, name='users_view'),
 ]

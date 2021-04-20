@@ -5,8 +5,7 @@ $(function () {
     const milestoneModal = $('#milestone-modal')
 
     const BASE_URL = 'http://127.0.0.1:8000'
-
-    $('#nav-login').hide();
+    const csrftoken = Cookies.get('csrftoken');
 
     ////////////////////////////////////////////////////////////
     ///// Build the HTML for each of the monthly calendars /////
@@ -21,7 +20,7 @@ $(function () {
         year = new Date(yearTemp, monthTemp).getFullYear();
 
         // Get the milestone data from server
-        const milestonesThisMonth = await axios.get(`${BASE_URL}/calendars/milestones`, {params: {'month':month, 'year':year}});
+        const milestonesThisMonth = await axios.get(`${BASE_URL}/calendars/milestones`, {params: {'month':month, 'year':year}}, {headers: {'X-CSRFToken': csrftoken}});
         console.log(milestonesThisMonth);
 
         // Initiate a head and body for the calendar table
@@ -176,7 +175,7 @@ $(function () {
             const errors = validateMilestoneInputs(milestoneData);
             if (errors.length === 0) {
 
-                const response = await axios.post(`${BASE_URL}/calendars/milestones`, milestoneData);
+                const response = await axios.post(`${BASE_URL}/calendars/milestones`, milestoneData, {headers: {'X-CSRFToken': csrftoken}});
                 const newMilestone = new Milestone(response.data);
                 
                 tempMilestone.remove();

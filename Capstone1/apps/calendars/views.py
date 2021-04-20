@@ -12,7 +12,6 @@ from apps.calendars.models import Milestones, Goals
 def calendars_view(request):
     return render(request, 'calendars/calendars.html')
 
-@csrf_exempt
 @login_required
 def milestones(request):
     
@@ -27,8 +26,4 @@ def milestones(request):
         year = int(request.GET.get('year'))        
         monthMilestones = Milestones.objects.filter(date__gte=date(year,month,1)).filter(date__lt=date(year,month+1,1)).order_by('date')
         monthMilestonesJSON = [{milestone.date.day: milestone.JSON()} for milestone in monthMilestones]
-        # import pdb; pdb.set_trace()
         return JsonResponse(monthMilestonesJSON, safe=False)
-
-    
-# @login_required(redirect_field_name='my_redirect_field')
