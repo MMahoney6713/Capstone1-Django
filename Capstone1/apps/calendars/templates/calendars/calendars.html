@@ -71,7 +71,7 @@
         
     </div>
 
-    <!-- Modal for creating event -->
+    <!-- Milestone Modal -->
     <div class="modal fade milestone-modal" id="milestone-modal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered edit-milestone-modal-content" role="document">
             <div class="modal-content ">
@@ -127,6 +127,45 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-milestone-cancel" data-dismiss="modal">Cancel</button>
                     <button form="milestone-form" type="button" class="btn btn-success btn-milestone-create">Save Milestone</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Missions Modal -->
+    <div class="modal fade mission-modal" id="mission-modal" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered edit-mission-modal-content" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                <h5 class="modal-title" id="ModalLongTitle">Create/Edit Mission</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="" id="mission-form" action="/missions" method="POST"> {% csrf_token %}
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="mission-month" class="col-sm col-form-label">Title:</label>
+                                <div class="col-sm mb-6 mb-sm-0">
+                                    <input type="text" class="form-control form-control-user" id="mission-month">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="mission-month" class="col-sm col-form-label">Description:</label>
+                                <div class="col-sm mb-6 mb-sm-0">
+                                    <textarea type="textarea" class="form-control form-control-user" id="mission-month" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-mission-cancel" data-dismiss="modal">Cancel</button>
+                    <button form="mission-form" type="button" class="btn btn-success btn-mission-create">Save Mission</button>
                 </div>
             </div>
         </div>

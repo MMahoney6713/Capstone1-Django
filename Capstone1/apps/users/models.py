@@ -44,7 +44,7 @@ class User(AbstractBaseUser):
         unique=True,
     )
     full_name = models.CharField(max_length=100)
-    image_url = models.CharField(max_length=200, blank=True)
+    image_url = models.CharField(max_length=200, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 

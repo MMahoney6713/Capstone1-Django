@@ -22,13 +22,14 @@ class Goals(models.Model):
 
 class Milestones(models.Model):
     title = models.CharField(max_length=20)
-    goal = models.ForeignKey(Goals, on_delete=models.CASCADE)
+    goal = models.ForeignKey(Goals, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def JSON(self):
         return {
             'id': self.id,
-            'goal_id': self.goal.id,
+            'goal_id': '' if self.goal is None else self.goal.id,
             'title': self.title,
             'day': self.date.day,
             'month': self.date.month,
