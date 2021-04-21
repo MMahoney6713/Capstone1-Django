@@ -8,7 +8,6 @@ from apps.users.models import User
 
 def landing_page(request):
     if request.user.is_authenticated:
-
         return redirect('calendars:calendars_view')
     else:
         return render(request, 'users/landing-page.html')
@@ -34,14 +33,11 @@ def login_view(request):
         user = authenticate(request, email=user_data['email'], password=user_data['password'])
         if user is not None:
             login(request, user)
-            # Redirect to a success page.
             return redirect('calendars:calendars_view')
         else:
-            # Return an 'invalid login' error message.
             return redirect('users:login_view')
 
 
 def logout_view(request):
     logout(request)
-    # Redirect to a success page.
     return redirect('users:landing_page')

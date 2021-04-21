@@ -3,6 +3,7 @@ $(async function() {
     const BASE_URL = 'http://127.0.0.1:8000';
     const csrftoken = Cookies.get('csrftoken');
     
+
     $('#registerBtn').on('click', async function (event) {
         event.preventDefault();
 
@@ -19,6 +20,7 @@ $(async function() {
         window.location = redirectURL;
     })
 
+
     $('#loginBtn').on('click', async function (event) {
         event.preventDefault();
 
@@ -33,6 +35,7 @@ $(async function() {
         window.location = redirectURL;
     })
 
+    
     $('#logoutBtn').on('click', async function (event) {
         event.preventDefault();
 
