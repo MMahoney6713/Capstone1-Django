@@ -23,3 +23,7 @@ table * {
 .overflow {
     overflow: visible;
 }
+
+.btn-mission-delete {
+    padding-left: 1em;
+}

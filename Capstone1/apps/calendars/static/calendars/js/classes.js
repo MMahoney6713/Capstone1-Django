@@ -1,4 +1,7 @@
 
+const BASE_URL = 'http://127.0.0.1:8000'
+const csrftoken = Cookies.get('csrftoken');
+
 class Milestone {
     constructor(milestoneObj) {
         this.id = milestoneObj.id;
@@ -68,8 +71,36 @@ class Calendar {
 }
 
 
-class Goal {
-    constructor() {
-        
+class Mission {
+
+    static missionsUrl = 'calendars/missions';
+
+    constructor(missionObj) {
+        this.id = missionObj.id;
+        this.title = missionObj.title;
+        this.month = missionObj.month;
+    }
+    
+
+    HTML() {
+        return $(`<li data-id="${this.id}">${this.title}<i class="fas fa-trash-alt btn-mission-delete"></i></li>`);
+    }
+
+    static async post(missionData) {
+        const response = await axios.post(`${BASE_URL}/${Mission.missionsUrl}`, missionData, {headers: {'X-CSRFToken': csrftoken}});
+        return new Mission(response.data)
+    }
+
+    static async getAll() {
+        const response = await axios.get(`${BASE_URL}/${Mission.missionsUrl}`);
+        console.log(response)
+        // missionList = Array(response.data.length)
+        // for (let i = 0; i < missionList.length; i++) {
+        //     missionList[i] = response.data
+        // }
+    }
+
+    async delete() {
+        const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}/${this.id}`)
     }
 }

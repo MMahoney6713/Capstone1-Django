@@ -4,7 +4,7 @@ $(function () {
     const monthlyViewDiv = $('.month-views');
     const milestoneModal = $('#milestone-modal')
 
-    const BASE_URL = 'http://127.0.0.1:8000'
+    const BASE_URL = 'http://127.0.0.1:8000';
     const csrftoken = Cookies.get('csrftoken');
 
     ////////////////////////////////////////////////////////////
@@ -21,8 +21,7 @@ $(function () {
 
         // Get the milestone data from server
         const milestonesThisMonth = await axios.get(`${BASE_URL}/calendars/milestones`, {params: {'month':month, 'year':year}}, {headers: {'X-CSRFToken': csrftoken}});
-        console.log(milestonesThisMonth);
-
+        
         // Initiate a head and body for the calendar table
         const calendarHead = buildCalendarHead(monthsArray[month], year); 
         const calendarBody = $('<tbody>');
@@ -86,7 +85,7 @@ $(function () {
                     dayRow.append($('<td class="table-secondary py-1"></td>'));
                     milestoneRow.append($('<td class="table-secondary p-1"></td>'));
                 } else {
-                    if (today.getDay() === dayCount && today.getMonth() === month) {
+                    if (today.getDate() === dayCount && today.getMonth() === month) {
                         dayRow.append($(`<td class="table-warning py-1">${dayCount}</td>`));
                         milestoneRow.append($(`
                         <td class="table-warning milestone-space p-1" id="${year}-${month + 1}-${dayCount}"></td>`));
