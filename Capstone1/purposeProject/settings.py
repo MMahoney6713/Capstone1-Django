@@ -96,6 +96,8 @@ DATABASES = {
 
 LOGIN_URL = 'users:login_view'
 
+# CSRF_COOKIE_NAME = "XSRF-TOKEN"
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

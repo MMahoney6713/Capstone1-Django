@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.csrf import csrf_protect, csrf_exempt, ensure_csrf_cookie
 from django.http import HttpResponse, JsonResponse
 import json
 
@@ -24,7 +24,7 @@ def register_view(request):
             login(request, user)
             return redirect('calendars:calendars_view')
 
-
+@ensure_csrf_cookie
 def login_view(request):
     if request.method == 'GET':
         return render(request, 'users/login.html')
