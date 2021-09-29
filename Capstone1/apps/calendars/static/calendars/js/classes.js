@@ -78,29 +78,31 @@ class Mission {
     constructor(missionObj) {
         this.id = missionObj.id;
         this.title = missionObj.title;
-        this.month = missionObj.month;
+        this.description = missionObj.description;
     }
     
 
     HTML() {
-        return $(`<li data-id="${this.id}">${this.title}<i class="fas fa-trash-alt btn-mission-delete"></i></li>`);
+        return $(`<li data-id="${this.id}">${this.title}<i class="fas fa-trash-alt btn-mission-delete hidden"></i></li>`);
     }
 
     static async post(missionData) {
         const response = await axios.post(`${BASE_URL}/${Mission.missionsUrl}`, missionData, {headers: {'X-CSRFToken': csrftoken}});
-        return new Mission(response.data)
+        return new Mission(response.data);
     }
 
     static async getAll() {
         const response = await axios.get(`${BASE_URL}/${Mission.missionsUrl}`);
-        console.log(response)
-        // missionList = Array(response.data.length)
-        // for (let i = 0; i < missionList.length; i++) {
-        //     missionList[i] = response.data
-        // }
+        const missionList = Array(response.data.length);
+        for (let i = 0; i < missionList.length; i++) {
+            const missionData = response.data[i];
+            const mission = new Mission({'id':missionData.id, 'title':missionData.title, 'description':missionData.description});
+            missionList[i] = mission.HTML();
+        }
+        return missionList;
     }
 
     async delete() {
-        const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}/${this.id}`)
+        const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}/${this.id}`);
     }
 }

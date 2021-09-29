@@ -12,6 +12,13 @@ class Missions(models.Model):
     description = models.CharField(max_length=200)
     # color
 
+    def JSON(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description
+        }
+
 
 class Goals(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

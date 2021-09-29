@@ -141,13 +141,23 @@ $(function () {
 
     
     //////////////////////////////////////////////////////////////////////////////
-    ///// Add event handlers for add/edit milestone actions on the calendars /////
+    ///// Add event handlers for add/edit/delete milestone actions on the calendars /////
     //////////////////////////////////////////////////////////////////////////////
 
-    monthlyViewDiv.on('click', 'td.milestone-space', function (event) {
-        const clickedCalendarCell = $(event.target).closest('td');
-        tempMilestone = showTemporaryMilestone(clickedCalendarCell);
-        setupAndShowModal(clickedCalendarCell, tempMilestone);
+    monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
+        target = $(event.target);
+        if (target.is('td')) {
+            const clickedCalendarCell = $(event.target).closest('td');
+            tempMilestone = showTemporaryMilestone(clickedCalendarCell);
+            setupAndShowModal(clickedCalendarCell, tempMilestone);
+        } else if (target.is('a')) {
+            if (target.hasClass('milestone-delete')) {
+                milestoneID = target.parent().parent().data('id');
+                await deleteMilestone(milestoneID);
+                target.parent().parent().remove();
+            }
+        }
+        
     })
 
     function showTemporaryMilestone(calendarCell) {
@@ -193,6 +203,10 @@ $(function () {
             milestoneModal.modal('hide');
             tempMilestone.remove();
         })
+    }
+
+    async function deleteMilestone(milestoneID) {
+        const response = await axios.delete(`${BASE_URL}/calendars/milestones`, {data: {'milestone_id':milestoneID}, headers: {'X-CSRFToken': csrftoken}});
     }
 
     function validateMilestoneInputs(milestoneInputs) {

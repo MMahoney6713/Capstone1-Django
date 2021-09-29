@@ -1,4 +1,4 @@
-$(function() {
+$(async function() {
 
     const missionsList = $('#missions-list');
     const missionsBtn = $('#missions-btn');
@@ -6,9 +6,12 @@ $(function() {
     const missionModal = $('#mission-modal');
 
     async function getMissions() {
-        await Mission.getAll()
+        const missions = await Mission.getAll()
+        for (const missionHTML of missions) {
+            missionsList.append(missionHTML)
+        }
     }
-    getMissions()
+    await getMissions()
     
 
 
@@ -17,9 +20,7 @@ $(function() {
     ///// Build the HTML for each of the user missions     /////
     ////////////////////////////////////////////////////////////
     
-    
-    
-    
+
     missionsBtn.on('click', function () {
         missionModal.modal('show');
     })
@@ -53,12 +54,21 @@ $(function() {
         $(event.target).parent().remove();        
     })
 
-    // missionsList.on('mouseover', 'li', function(event) {
-    //     $(event.target).append('<i class="fas fa-trash-alt btn-mission-delete"></i>')
-    // })
-    // missionsList.on('mouseout', 'li', function(event) {
-    //     $(event.target).children().remove()
-    // })
+    missionsList.on('mouseenter', 'li', function(event) {
+        deleteBtn = $(event.target).find('i');
+        if (deleteBtn.hasClass('hidden')) {
+            deleteBtn.toggle('hidden')
+        }
+    })
+    missionsList.on('mouseleave', 'li', function(event) {
+        target = $(event.target);
+        if (target.is('i')) {
+            target.toggle('hidden');
+        } else {
+            target.children('i').toggle('hidden');
+        }
+        
+    })
 
     function validateMissionInputs(missionInputs) {
         return [];
