@@ -93,10 +93,6 @@ $(function () {
                         dayRow.append($(`<td class="py-1">${dayCount}</td>`));
                         milestoneRow.append($(`<td class="milestone-space p-1" id="${year}-${month + 1}-${dayCount}">`));
                     }
-
-
-
-
                     
                     // Temporary for adding milestones
                     for (let k = 0; k < milestonesThisMonth.data.length; k++) {
@@ -105,10 +101,6 @@ $(function () {
                             milestoneRow.children().last().append(newMilestone.HTML());
                         }
                     }
-
-
-
-
 
                     dayCount++;
                 }
@@ -133,7 +125,6 @@ $(function () {
     }
     const numberOfMonthsToShow = 3;
     buildCalendars(numberOfMonthsToShow);
-
 
 
 

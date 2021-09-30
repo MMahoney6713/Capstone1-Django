@@ -36,10 +36,7 @@ $(async function() {
         const errors = validateMissionInputs(missionData);
         if (errors.length === 0) {
 
-            // const response = await axios.post(`${BASE_URL}/calendars/missions`, missionData, {headers: {'X-CSRFToken': csrftoken}});
-            // const newMission = new Mission(response.data);
             const newMission = await Mission.post(missionData)
-            
             missionsList.append(newMission.HTML())
 
             missionModal.modal('hide');
