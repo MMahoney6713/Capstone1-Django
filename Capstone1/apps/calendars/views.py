@@ -28,11 +28,18 @@ def milestones(request):
 
     elif request.method == "GET":
         month = int(request.GET.get('month')) + 1 # Adjust the month value +1 based on differences between datetime objects and front end date objects
-        year = int(request.GET.get('year'))        
+        year = int(request.GET.get('year'))
+        
+        next_month = month + 1
+        next_year = year
+        if next_month > 12:
+            next_year += 1
+            next_month = next_month%12
+        
         month_milestones = Milestones.objects \
             .filter(user_id = request.user.id) \
             .filter(date__gte = date(year,month,1)) \
-            .filter(date__lt = date(year,month+1,1)) \
+            .filter(date__lt = date(next_year,next_month,1)) \
             .order_by('date')
         month_milestones_JSON = [{milestone.date.day: milestone.JSON()} for milestone in month_milestones]
         return JsonResponse(month_milestones_JSON, safe=False)
@@ -61,3 +68,10 @@ def missions(request):
         )
         new_mission.save()
         return JsonResponse(new_mission.JSON())
+
+    elif request.method == "DELETE":
+        # import pdb; pdb.set_trace()
+        mission_data = json.loads(request.body)
+        mission_to_delete = Missions.objects.get(id=mission_data['mission_id'])
+        mission_to_delete.delete()
+        return JsonResponse({'foo':'bar'}, safe=False)

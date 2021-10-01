@@ -7,13 +7,14 @@ $(function () {
     const BASE_URL = 'http://127.0.0.1:8000';
     const csrftoken = Cookies.get('csrftoken');
 
+    const monthsArray = ['January', 'February', 'March', 'April', 'May',
+            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     ////////////////////////////////////////////////////////////
     ///// Build the HTML for each of the monthly calendars /////
     ////////////////////////////////////////////////////////////
 
     async function setupCalendar(monthTemp, yearTemp, today) {
-        const monthsArray = ['January', 'February', 'March', 'April', 'May',
-            'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         
         // Reset Month and Year using the input temporary variables in case of month value being < 0 or > 12
         month = new Date(yearTemp, monthTemp).getMonth();
@@ -127,99 +128,48 @@ $(function () {
     // buildCalendars(numberOfMonthsToShow);
 
 
-    async function buildCalendars(startingMonth, startingYear, today) {
-        numberOfMonthsToShow = 2;
+    async function buildCalendars(numberOfMonthsToShow, startingMonth, startingYear, today) {
         for (let i = 0; i < numberOfMonthsToShow; i++) {
             await setupCalendar(startingMonth + i, startingYear, today);
         }
     }
     const today = new Date();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
-    buildCalendars(currentMonth, currentYear, today);
+    let startingMonth = today.getMonth();
+    let startingYear = today.getFullYear();
+    numberOfMonthsToShow = 2;
+    buildCalendars(numberOfMonthsToShow, startingMonth, startingYear, today);
+
+
+
+
+    ////////////////////////////////////////////////////////////
+    ///// Event Handlers for forward/backward on calendars /////
+    ////////////////////////////////////////////////////////////
+
+    $('.bi-arrow-left-circle-fill').on('click', async function(event) {
+        monthlyViewDiv.empty();
+        if (startingMonth <= numberOfMonthsToShow) {
+            startingMonth -= monthsArray.length + startingMonth - numberOfMonthsToShow;
+            startingYear -= 1;
+        } else {
+            startingMonth -= numberOfMonthsToShow;
+        }
+        buildCalendars(numberOfMonthsToShow, startingMonth, startingYear, today)
+    })
+
+    $('.bi-arrow-right-circle-fill').on('click', async function(event) {
+        monthlyViewDiv.empty();
+        if (startingMonth >= monthsArray.length - numberOfMonthsToShow) {
+            startingMonth = -monthsArray.length + startingMonth - numberOfMonthsToShow;
+            startingYear += 1;
+        } else {
+            startingMonth += numberOfMonthsToShow;
+        }
+        buildCalendars(numberOfMonthsToShow, startingMonth, startingYear, today)
+    })
+
 
 
     
-    //////////////////////////////////////////////////////////////////////////////
-    ///// Add event handlers for add/edit/delete milestone actions on the calendars /////
-    //////////////////////////////////////////////////////////////////////////////
-
-    // monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
-    //     target = $(event.target);
-    //     if (target.is('td')) {
-    //         const clickedCalendarCell = $(event.target).closest('td');
-    //         tempMilestone = showTemporaryMilestone(clickedCalendarCell);
-    //         setupAndShowModal(clickedCalendarCell, tempMilestone);
-    //     } else if (target.is('a')) {
-    //         if (target.hasClass('milestone-delete')) {
-    //             milestoneID = target.parent().parent().data('id');
-    //             await deleteMilestone(milestoneID);
-    //             target.parent().parent().remove();
-    //         }
-    //     }
-        
-    // })
-
-    // function showTemporaryMilestone(calendarCell) {
-    //     tempMilestone = Milestone.emptyMilestone();
-    //     calendarCell.append(tempMilestone);
-    //     return tempMilestone;
-    // }
-
-    // function setupAndShowModal(calendarCell, tempMilestone) {
-    //     milestoneModal.modal('show')
-    //     const [year, month, day] = calendarCell.attr('id').split('-'); 
-    //     $('#milestone-year').val(year)
-    //     $('#milestone-month').val(month)
-    //     $('#milestone-day').val(day)
-    //     addModalListeners(milestoneModal, calendarCell, tempMilestone)
-    // }
-
-    // function addModalListeners(milestoneModal, calendarCell, tempMilestone) {
-        
-    //     $('.btn-milestone-create').on('click', async function(event) {
-    //         event.preventDefault();
-
-    //         const milestoneData = retreiveMilestoneDataFromModal()
-    //         const errors = validateMilestoneInputs(milestoneData);
-    //         if (errors.length === 0) {
-
-    //             const response = await axios.post(`${BASE_URL}/calendars/milestones`, milestoneData, {headers: {'X-CSRFToken': csrftoken}});
-    //             const newMilestone = new Milestone(response.data);
-                
-    //             tempMilestone.remove();
-    //             calendarCell.append(newMilestone.HTML());
-
-    //             milestoneModal.modal('hide');
-    //             $('#milestone-title').val('');
-    //             $('#milestone-goal').val('');
-    //             $('.btn-milestone-create').off();
-    //         } else {
-
-    //         }
-    //     })
-
-    //     $('.btn-milestone-cancel').on('click', function() {
-    //         milestoneModal.modal('hide');
-    //         tempMilestone.remove();
-    //     })
-    // }
-
-    // async function deleteMilestone(milestoneID) {
-    //     const response = await axios.delete(`${BASE_URL}/calendars/milestones`, {data: {'milestone_id':milestoneID}, headers: {'X-CSRFToken': csrftoken}});
-    // }
-
-    // function validateMilestoneInputs(milestoneInputs) {
-    //     return [];
-    // }
-
-    // function retreiveMilestoneDataFromModal() {
-    //     return {
-    //         'year': $('#milestone-year').val(),
-    //         'month': $('#milestone-month').val(),
-    //         'day': $('#milestone-day').val(),
-    //         'title': $('#milestone-title').val(),
-    //         'goal_id': $('#milestone-goal').val(),
-    //     }
-    // }
+    
 })

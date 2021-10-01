@@ -102,7 +102,8 @@ class Mission {
         return missionList;
     }
 
-    async delete() {
-        const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}/${this.id}`);
+    static async delete(missionID) {
+        const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}`, {data: {'mission_id':missionID}, headers: {'X-CSRFToken': csrftoken}});
+        return response;
     }
 }

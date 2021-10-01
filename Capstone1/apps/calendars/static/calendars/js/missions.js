@@ -47,8 +47,10 @@ $(async function() {
         }
     })
 
-    missionsList.on('click','.btn-mission-delete', function(event) {
-        $(event.target).parent().remove();        
+    missionsList.on('click','.btn-mission-delete', async function(event) {
+        const mission = $(event.target).parent();
+        const response = await Mission.delete(mission.data('id'))
+        mission.remove();
     })
 
     missionsList.on('mouseenter', 'li', function(event) {
