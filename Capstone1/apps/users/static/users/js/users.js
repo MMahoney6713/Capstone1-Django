@@ -36,6 +36,20 @@ $(async function() {
         window.location = redirectURL;
     })
 
+    $('#loginBtnGoogle').on('click', async function (event) {
+        event.preventDefault();
+
+        const userData = {
+            email: $('#email').val(),
+            password: $('#password').val()
+        }
+
+        const response = await axios.post(`${BASE_URL}/accounts/login/`, userData, {headers: {'X-CSRFToken': csrftoken}})
+
+        const redirectURL = response.request.responseURL;
+        window.location = redirectURL;
+    })
+
     
     $('#logoutBtn').on('click', async function (event) {
         event.preventDefault();

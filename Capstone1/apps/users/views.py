@@ -26,9 +26,11 @@ def register_view(request):
 
 @ensure_csrf_cookie
 def login_view(request):
+    
     if request.method == 'GET':
         return render(request, 'users/login.html')
     elif request.method == 'POST':
+        import pdb; pdb.set_trace
         user_data = json.loads(request.body)
         user = authenticate(request, email=user_data['email'], password=user_data['password'])
         if user is not None:

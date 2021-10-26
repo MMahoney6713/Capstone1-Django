@@ -76,7 +76,7 @@
                         {% else %}
                         <!-- Nav Item - User Login -->
                         <li class="nav-item" id="nav-login">
-                            <a class="nav-link" href="/login" role="button">
+                            <a class="nav-link" href="/accounts/login" role="button">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Login</span>
                                 <i class="fas fa-user-circle fa-2x"></i>
                             </a>
@@ -86,7 +86,7 @@
 
                         <!-- Nav Item - User Register -->
                         <li class="nav-item" id="nav-registeer">
-                            <a class="nav-link" href="/register" role="button">
+                            <a class="nav-link" href="/accounts/signup" role="button">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Register</span>
                                 <i class="fas fa-id-badge fa-2x"></i>
                             </a>
@@ -142,7 +142,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/logout" id="">Logout</a>
+                    <a class="btn btn-primary" href="/accounts/logout" id="">Logout</a>
                 </div>
             </div>
         </div>
@@ -153,6 +153,8 @@
     <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+    <!-- <script src="https://apis.google.com/js/platform.js" async defer></script> -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     {% block scripts %}{% endblock %}
 </body>
 
