@@ -15,6 +15,9 @@
 </head>
 
 <body id="page-top">
+    {% load i18n %}
+    {% load account socialaccount %}
+    {% get_providers as socialaccount_providers %}
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -142,7 +145,14 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="/accounts/logout" id="">Logout</a>
+                    <!-- <a class="btn btn-primary" href="/accounts/logout" id="">Logout</a> -->
+                    <form method="post" action="{% url 'account_logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+                        {% endif %}
+                        <button class="btn btn-primary" type="submit">{% trans 'Logout' %}</button>
+                    </form>
                 </div>
             </div>
         </div>
