@@ -85,6 +85,9 @@ SOCIALACCOUNT_AUTO_SIGNUP = False
 
 LOGIN_REDIRECT_URL = '/calendars'
 
+# Define custom signup form deviating from 
+SOCIALACCOUNT_FORMS = {'signup': 'apps.users.forms.CustomSignupForm'}
+
 ###############################################################################################
 
 MIDDLEWARE = [
