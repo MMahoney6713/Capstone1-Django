@@ -1,8 +1,12 @@
 {% extends 'main-template.html' %}
 
+{% load i18n %}
+{% load account socialaccount %}
+
 {% block title %}Register{% endblock %}
 
 {% block content %}
+{% get_providers as socialaccount_providers %}
 <div class="container">
 
     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -39,13 +43,9 @@
                                 Register Account
                             </a>
                             <hr>
-                            <!-- <div class="g-signin2" data-onsuccess="onSignIn">Sign in with google</div> -->
-                            <!-- <a href="" class="btn btn-google btn-user btn-block">
-                                <i class="fab fa-google fa-fw"></i> Register with Google
+                            <a href="{% provider_login_url 'google' process='login'%}" class="btn btn-google btn-user btn-block socialaccount_provider google">
+                                <i class="fab fa-google fa-fw"></i> Login with Google
                             </a>
-                            <a href="" class="btn btn-facebook btn-user btn-block">
-                                <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                            </a> -->
                         </form>
                         <!-- <hr>
                         <div class="text-center">
