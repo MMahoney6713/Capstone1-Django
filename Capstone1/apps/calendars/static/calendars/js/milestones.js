@@ -25,6 +25,9 @@ $(function () {
                 await deleteMilestone(milestoneID);
                 target.parent().parent().remove();
             }
+            if (target.hasClass('milestone-update')) {
+                console.log('hello');
+            }
         }
         
     })
