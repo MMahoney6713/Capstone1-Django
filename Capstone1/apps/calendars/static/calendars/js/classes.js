@@ -102,6 +102,11 @@ class Mission {
         return missionList;
     }
 
+    static async update(missionData) {
+        const response = await axios.post(`${BASE_URL}/${Mission.missionsUrl}`, missionData, {headers: {'X-CSRFToken': csrftoken}})
+        return response;
+    }
+
     static async delete(missionID) {
         const response = await axios.delete(`${BASE_URL}/${Mission.missionsUrl}`, {data: {'mission_id':missionID}, headers: {'X-CSRFToken': csrftoken}});
         return response;

@@ -15,21 +15,20 @@ $(function () {
 
     monthlyViewDiv.on('click', 'td.milestone-space', async function (event) {
         target = $(event.target);
+        const clickedCalendarCell = $(event.target).closest('td');
         if (target.is('td')) {
-            const clickedCalendarCell = $(event.target).closest('td');
             tempMilestone = showTemporaryMilestone(clickedCalendarCell);
-            setupAndShowModal(clickedCalendarCell, tempMilestone);
+            setupAndShowModal(clickedCalendarCell, tempMilestone, 'post', milestoneID='');
         } else if (target.is('a')) {
+            milestoneID = target.parent().parent().data('id');
             if (target.hasClass('milestone-delete')) {
-                milestoneID = target.parent().parent().data('id');
                 await deleteMilestone(milestoneID);
                 target.parent().parent().remove();
-            }
-            if (target.hasClass('milestone-update')) {
-                console.log('hello');
+            } else if (target.hasClass('milestone-update')) {
+                tempMilestone = target.parent().parent();
+                setupAndShowModal(clickedCalendarCell, tempMilestone, 'put', milestoneID)
             }
         }
-        
     })
 
     function showTemporaryMilestone(calendarCell) {
@@ -38,16 +37,16 @@ $(function () {
         return tempMilestone;
     }
 
-    function setupAndShowModal(calendarCell, tempMilestone) {
+    function setupAndShowModal(calendarCell, tempMilestone, requestType, milestoneID) {
         milestoneModal.modal('show')
         const [year, month, day] = calendarCell.attr('id').split('-'); 
         $('#milestone-year').val(year)
         $('#milestone-month').val(month)
         $('#milestone-day').val(day)
-        addModalListeners(milestoneModal, calendarCell, tempMilestone)
+        addModalListeners(milestoneModal, calendarCell, tempMilestone, requestType, milestoneID);
     }
 
-    function addModalListeners(milestoneModal, calendarCell, tempMilestone) {
+    function addModalListeners(milestoneModal, calendarCell, tempMilestone, requestType, milestoneID) {
         
         $('.btn-milestone-create').on('click', async function(event) {
             event.preventDefault();
@@ -56,19 +55,23 @@ $(function () {
             const errors = validateMilestoneInputs(milestoneData);
             if (errors.length === 0) {
 
-                const response = await axios.post(`${BASE_URL}/calendars/milestones`, milestoneData, {headers: {'X-CSRFToken': csrftoken}});
-                const newMilestone = new Milestone(response.data);
-                
+                if (requestType === "post") {
+                    const response = await axios.post(`${BASE_URL}/calendars/milestones`, milestoneData, {headers: {'X-CSRFToken': csrftoken}});
+                    const newMilestone = new Milestone(response.data);
+                    calendarCell.append(newMilestone.HTML());
+                } else if (requestType === "put") {
+                    milestoneData['id'] = milestoneID;
+                    const response = await axios.put(`${BASE_URL}/calendars/milestones`, milestoneData, {headers: {'X-CSRFToken': csrftoken}});
+                    const newMilestone = new Milestone(response.data);
+                    calendarCell.append(newMilestone.HTML());
+                }
                 tempMilestone.remove();
-                calendarCell.append(newMilestone.HTML());
+            } 
 
-                milestoneModal.modal('hide');
-                $('#milestone-title').val('');
-                $('#milestone-goal').val('');
-                $('.btn-milestone-create').off();
-            } else {
-
-            }
+            milestoneModal.modal('hide');
+            $('#milestone-title').val('');
+            $('#milestone-goal').val('');
+            $('.btn-milestone-create').off();
         })
 
         $('.btn-milestone-cancel').on('click', function() {
@@ -80,6 +83,10 @@ $(function () {
     async function deleteMilestone(milestoneID) {
         const response = await axios.delete(`${BASE_URL}/calendars/milestones`, {data: {'milestone_id':milestoneID}, headers: {'X-CSRFToken': csrftoken}});
     }
+
+    // async function updateMilestone(milestoneID) {
+    //     const response = await axios.post(`${BASE_URL}/calendars/milestones`, {data: {'milestone_id':milestoneID}, headers: {'X-CSRFToken': csrftoken}});
+    // }
 
     function validateMilestoneInputs(milestoneInputs) {
         return [];
