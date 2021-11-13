@@ -80,15 +80,6 @@ def missions(request):
         new_mission.save()
         return JsonResponse(new_mission.JSON())
 
-    # elif request.method == "PUT":
-    #     mission_data = json.loads(request.body)
-    #     updated_mission = Missions.get(id=mission_data['mission_id'])
-    #     updated_mission.title = mission_data['title']
-    #     updated_mission.description = mission_data['description']
-    #     updated_mission.
-    #     updated_mission.save()
-    #     return JsonResponse(updated_mission.JSON())
-
     elif request.method == "DELETE":
         mission_data = json.loads(request.body)
         mission_to_delete = Missions.objects.get(id=mission_data['mission_id'])
@@ -96,3 +87,26 @@ def missions(request):
         return JsonResponse({'foo':'bar'}, safe=False)
 
     
+@login_required
+def goals(request):
+
+    if request.method == "GET":
+        user_goals = Goals.objects.filter(user_id = request.user.id).all()
+        user_goals_JSON = [goal.JSON() for goal in user_goals]
+        return JsonResponse(user_goals_JSON, safe=False)
+
+    elif request.method == "POST":
+        goal_data = json.loads(request.body)
+        new_goal = Goals.objects.create(
+            user = request.user,
+            title = goal_data['title'],
+            description = goal_data['description'] if goal_data['description'] != '' else "No Description"
+        )
+        new_goal.save()
+        return JsonResponse(new_goal.JSON())
+
+    elif request.method == "DELETE":
+        goal_data = json.loads(request.body)
+        goal_to_delete = Goals.objects.get(id=goal_data['goal_id'])
+        goal_to_delete.delete()
+        return JsonResponse({'foo':'bar'}, safe=False)

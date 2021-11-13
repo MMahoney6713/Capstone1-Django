@@ -26,6 +26,13 @@ class Goals(models.Model):
     description = models.CharField(max_length=200)
     # color
 
+    def JSON(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description
+        }
+
 
 class Milestones(models.Model):
     title = models.CharField(max_length=20)
