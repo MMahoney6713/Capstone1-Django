@@ -47,26 +47,38 @@ $(async function() {
         }
     })
 
-    missionsList.on('click','.btn-mission-delete', async function(event) {
-        const mission = $(event.target).parent();
-        const response = await Mission.delete(mission.data('id'))
-        mission.remove();
+
+    missionsList.on('click','.btn-mission-update', async function(event) {
+        let missionObj = $(event.target).parent().parent().parent();
+        if (event.target.nodeName === "path") {
+            missionObj = missionObj.parent();
+        }
+
+        const mission = new Mission({ 
+            'id': missionObj.data('id'), 
+            'title': missionObj.first().text(), 
+            'description': missionObj.last().text()})
+        setupAndShowMissionModal(mission, 'post')
     })
 
-    missionsList.on('mouseenter', 'li', function(event) {
-        deleteBtn = $(event.target).find('i');
-        if (deleteBtn.hasClass('hidden')) {
-            deleteBtn.toggle('hidden')
-        }
-    })
-    missionsList.on('mouseleave', 'li', function(event) {
-        target = $(event.target);
-        if (target.is('i')) {
-            target.toggle('hidden');
-        } else {
-            target.children('i').toggle('hidden');
+    function setupAndShowMissionModal(mission, requestType) {
+        missionModal.modal('show')
+        addListenersToMissionModal(mission, requestType);
+    }
+
+    function addListenersToMissionModal(mission, requestType) {
+        
+        
+    }
+
+    missionsList.on('click','.btn-mission-delete', async function(event) {
+        let mission = $(event.target).parent().parent().parent();
+        if (event.target.nodeName === "path") {
+            mission = mission.parent();
         }
         
+        const response = await Mission.delete(mission.data('id'));
+        mission.remove();
     })
 
     function validateMissionInputs(missionInputs) {
