@@ -48,8 +48,12 @@ $(async function() {
     })
 
     goalsList.on('click','.btn-goal-delete', async function(event) {
-        const goal = $(event.target).parent().parent().parent();
-        const response = await Goal.delete(goal.data('id'))
+        let goal = $(event.target).parent().parent().parent();
+        if (event.target.nodeName === "path") {
+            goal = goal.parent();
+        }
+        
+        const response = await Goal.delete(goal.data('id'));
         goal.remove();
     })
     
