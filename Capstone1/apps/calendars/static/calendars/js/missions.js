@@ -56,8 +56,7 @@ $(async function() {
                     missionsList.append(newMission.HTML())
                 } else if (requestType === "put") {
                     missionData['id'] = missionObj.data('id');
-                    const response = await axios.put(`${BASE_URL}/calendars/missions/`, missionData, {headers: {'X-CSRFToken': csrftoken}});
-                    const updatedMission = new Mission(response.data);
+                    const updatedMission = await Mission.put(missionData);
                     missionObj.find('.mission-title').text(updatedMission.title);
                     missionObj.find('.mission-description').text(updatedMission.description);
                 }

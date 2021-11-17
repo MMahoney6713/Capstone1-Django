@@ -98,7 +98,8 @@ $(function () {
             'month': $('#milestone-month').val(),
             'day': $('#milestone-day').val(),
             'title': $('#milestone-title').val(),
-            'goal_id': $('#milestone-goal').val(),
+            // 'goal_id': $('#milestone-goal').val(),
+            'goal_id': '',
         }
     }
 })

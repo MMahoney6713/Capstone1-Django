@@ -8,5 +8,6 @@ urlpatterns = [
     path('milestones', views.milestones, name='milestones'),
     path('missions/', views.missions, name='missions'),
     path('missions/<int:mission_id>', views.missions, name='missions'),
-    path('goals', views.goals, name='goals'),
+    path('goals/', views.goals, name='goals'),
+    path('goals/<int:goal_id>', views.goals, name='goals'),
 ]

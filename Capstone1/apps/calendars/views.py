@@ -66,7 +66,6 @@ def milestones(request):
 def missions(request, mission_id = ''):
 
     if request.method == "GET":
-        # import pdb; pdb.set_trace()
         if mission_id:
             user_missions = Missions.objects.filter(id = mission_id)
         else:
@@ -100,20 +99,16 @@ def missions(request, mission_id = ''):
         mission_to_delete = Missions.objects.get(id=mission_data['mission_id'])
         mission_to_delete.delete()
         return JsonResponse({'foo':'bar'}, safe=False)
-
-# @login_required
-# def get_one_mission(request, mission_id):
-
-#     user_missions = Missions.objects.filter(id = mission_id)
-    
-#     user_missions_JSON = [mission.JSON() for mission in user_missions]
-#     return JsonResponse(user_missions_JSON, safe=False)
     
 @login_required
-def goals(request):
+def goals(request, goal_id = ''):
 
     if request.method == "GET":
-        user_goals = Goals.objects.filter(user_id = request.user.id).all()
+        if goal_id:
+            user_goals = Goals.objects.filter(id = goal_id)
+        else:
+            user_goals = Goals.objects.filter(user_id = request.user.id).all()
+        
         user_goals_JSON = [goal.JSON() for goal in user_goals]
         return JsonResponse(user_goals_JSON, safe=False)
 
@@ -126,6 +121,16 @@ def goals(request):
         )
         new_goal.save()
         return JsonResponse(new_goal.JSON())
+
+    elif request.method == "PUT":
+        goal_data = json.loads(request.body)
+        updated_goal = Goals.objects.get(id=goal_data['id'])
+
+        updated_goal.title = goal_data['title']
+        updated_goal.description = goal_data['description']
+
+        updated_goal.save(update_fields=['title', 'description'])
+        return JsonResponse(updated_goal.JSON())
 
     elif request.method == "DELETE":
         goal_data = json.loads(request.body)

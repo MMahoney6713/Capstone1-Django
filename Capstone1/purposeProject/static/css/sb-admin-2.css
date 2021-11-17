@@ -10830,7 +10830,13 @@ a:focus {
 }
 
 .bg-landing-page-image {
-  background: url("https://source.unsplash.com/18mUXUS8ksI/640x426");
+  background: url('../images/mainApp2.jpg');
+  background-position: center;
+  background-size: cover;
+}
+
+.bg-landing-page-image2 {
+  background: url('../images/onPurposeGif.gif');
   background-position: center;
   background-size: cover;
 }

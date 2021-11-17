@@ -21,7 +21,7 @@ def register_view(request):
         user_data = json.loads(request.body)
         if User.validate_registration_data(user_data):
             user = User.objects.create_user(full_name=user_data['fullname'], email=user_data['email'], password=user_data['password1'])
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('calendars:calendars_view')
 
 @ensure_csrf_cookie
