@@ -2,7 +2,6 @@ $(async function() {
 
     const missionsList = $('#missions-list');
     const missionsBtn = $('#missions-btn');
-    const missionSubmitBtn = $('.btn-mission-create');
     const missionModal = $('#mission-modal');
 
     async function getMissions() {
@@ -23,30 +22,8 @@ $(async function() {
 
     missionsBtn.on('click', function () {
         missionModal.modal('show');
+        addListenersToMissionModal({}, 'post')
     })
-
-    missionSubmitBtn.on('click', async function(event) {
-        event.preventDefault();
-
-        missionData = {
-            'title': $('#mission-title').val(),
-            'description': $('#mission-description').val()
-        }
-
-        const errors = validateMissionInputs(missionData);
-        if (errors.length === 0) {
-
-            const newMission = await Mission.post(missionData)
-            missionsList.append(newMission.HTML())
-
-            missionModal.modal('hide');
-            $('#mission-title').val('');
-            $('#mission-description').val('');
-        } else {
-
-        }
-    })
-
 
     missionsList.on('click','.btn-mission-update', async function(event) {
         let missionObj = $(event.target).parent().parent().parent();
@@ -54,21 +31,47 @@ $(async function() {
             missionObj = missionObj.parent();
         }
 
-        const mission = new Mission({ 
-            'id': missionObj.data('id'), 
-            'title': missionObj.first().text(), 
-            'description': missionObj.last().text()})
-        setupAndShowMissionModal(mission, 'post')
+        const mission = await Mission.getOne(missionObj.data('id'))
+        setupAndShowMissionModal(mission, missionObj, 'put')
     })
 
-    function setupAndShowMissionModal(mission, requestType) {
+    function setupAndShowMissionModal(mission, missionObj, requestType) {
         missionModal.modal('show')
-        addListenersToMissionModal(mission, requestType);
+        $('#mission-title').val(mission.title);
+        $('#mission-description').val(mission.description);
+        addListenersToMissionModal(missionObj, requestType);
     }
 
-    function addListenersToMissionModal(mission, requestType) {
+    function addListenersToMissionModal(missionObj, requestType) {
         
-        
+        $('.btn-mission-create').on('click', async function(event) {
+            event.preventDefault();
+
+            const missionData = retreiveMissionDataFromModal()
+            const errors = validateMissionInputs(missionData);
+            if (errors.length === 0) {
+
+                if (requestType === "post") {
+                    const newMission = await Mission.post(missionData)
+                    missionsList.append(newMission.HTML())
+                } else if (requestType === "put") {
+                    missionData['id'] = missionObj.data('id');
+                    const response = await axios.put(`${BASE_URL}/calendars/missions/`, missionData, {headers: {'X-CSRFToken': csrftoken}});
+                    const updatedMission = new Mission(response.data);
+                    missionObj.find('.mission-title').text(updatedMission.title);
+                    missionObj.find('.mission-description').text(updatedMission.description);
+                }
+            } 
+
+            missionModal.modal('hide');
+            $('#mission-title').val('');
+            $('#mission-goal').val('');
+            $('.btn-mission-create').off();
+        })
+
+        $('.btn-milestone-cancel').on('click', function() {
+            milestoneModal.modal('hide');
+        })
     }
 
     missionsList.on('click','.btn-mission-delete', async function(event) {
@@ -87,13 +90,9 @@ $(async function() {
 
     function retreiveMissionDataFromModal() {
         return {
-            'year': $('#mission-year').val(),
-            'month': $('#mission-month').val(),
-            'day': $('#mission-day').val(),
             'title': $('#mission-title').val(),
-            'goal_id': $('#mission-goal').val(),
+            'description': $('#mission-description').val()
         }
     }
-
 
 })
