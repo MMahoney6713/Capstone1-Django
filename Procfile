@@ -1,1 +1,1 @@
-web: gunicorn purposeProject.wsgi --log-file -
+web: gunicorn Capstone1/purposeProject.wsgi --log-file -
