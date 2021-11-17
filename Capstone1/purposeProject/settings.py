@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#b1a!#&uc7k=ih7-if!z#i$i193)ok&l-7b1n2p5-(ppy8sd2y'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '#b1a!#&uc7k=ih7-if!z#i$i193)ok&l-7b1n2p5-(ppy8sd2y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,6 +92,7 @@ SOCIALACCOUNT_FORMS = {'signup': 'apps.users.forms.CustomSignupForm'}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -134,6 +135,11 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# Heroku: Update database configuration from $DATABASE_URL (mdn docs)
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
